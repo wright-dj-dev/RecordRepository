@@ -9,20 +9,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
-import { useCollections } from '../contexts/CollectionProvider';
-
-type Collection = {
-  _id?: string;
-  name: string;
-};
+import { useWorkspaces } from '../contexts/WorkspaceProvider';
 
 const Sidebar = () => {
-  const { collections, fetchCollections } = useCollections();
+  const { workspaces, fetchWorkspaces } = useWorkspaces();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [newCollectionName, setNewCollectionName] = useState('');
+  const [newWorkspaceName, setNewWorkspaceName] = useState('');
 
   useEffect(() => {
-    fetchCollections();
+    fetchWorkspaces();
   }, []);
 
   const handleDialogOpen = () => {
@@ -33,17 +28,17 @@ const Sidebar = () => {
     setDialogOpen(false);
   };
 
-  const handleCollectionNameChange = (event) => {
-    setNewCollectionName(event.target.value);
+  const handleWorkspaceNameChange = (event) => {
+    setNewWorkspaceName(event.target.value);
   };
 
-  const handleCreateCollection = async () => {
-    if (newCollectionName) {
+  const handleCreateWorkspace = async () => {
+    if (newWorkspaceName) {
       try {
-        await window.electron.ipcRenderer.invoke('insert-collection', {
-          name: newCollectionName,
+        await window.electron.ipcRenderer.invoke('insert-workspace', {
+          name: newWorkspaceName,
         });
-        fetchCollections();
+        fetchWorkspaces();
         handleDialogClose();
       } catch (error) {
         console.error('Database error:', error);
@@ -60,37 +55,37 @@ const Sidebar = () => {
       }}
     >
       <Button onClick={handleDialogOpen} fullWidth>
-        Add New Collection
+        Add New Workspace
       </Button>
       <List>
-        {collections.map((collection, index) => (
+        {workspaces.map((workspace, index) => (
           <ListItem key={index}>
             <Button
               component={Link}
-              to={`/collections/${collection._id}`}
+              to={`/workspaces/${workspace._id}`}
               fullWidth
             >
-              {collection.name}
+              {workspace.name}
             </Button>
           </ListItem>
         ))}
       </List>
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Add New Collection</DialogTitle>
+        <DialogTitle>Add New Workspace</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Collection Name"
+            label="Workspace Name"
             type="text"
             fullWidth
-            value={newCollectionName}
-            onChange={handleCollectionNameChange}
+            value={newWorkspaceName}
+            onChange={handleWorkspaceNameChange}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleCreateCollection}>Submit</Button>
+          <Button onClick={handleCreateWorkspace}>Submit</Button>
         </DialogActions>
       </Dialog>
     </Drawer>

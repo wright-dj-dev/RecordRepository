@@ -1,12 +1,12 @@
 import React from 'react';
 import ListItem from '@mui/material/ListItem';
 
-const RecordItem = ({ record }) => {
+const WorkspaceItem = ({ workspace }) => {
   return (
     <ListItem>
-      {record.name}
+      {workspace.name}
     </ListItem>
   );
 };
 
-export default RecordItem;
+export default WorkspaceItem;

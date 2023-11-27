@@ -1,21 +1,21 @@
 import { ipcMain } from 'electron';
 import db from './db';
 
-ipcMain.handle('get-collections', async (event) => {
+ipcMain.handle('get-workspaces', async (event) => {
   return new Promise((resolve, reject) => {
-    db.find({ type: 'collection' }, (err, docs) => {
+    db.find({ type: 'workspace' }, (err, docs) => {
       if (err) reject(err);
       resolve(docs);
     });
   });
 });
 
-ipcMain.handle('insert-collection', async (event, newCollectionData) => {
-  console.log('insert-collection data:', newCollectionData);
+ipcMain.handle('insert-workspace', async (event, newWorkspaceData) => {
+  console.log('insert-workspace data:', newWorkspaceData);
   try {
     const newDoc = await db.insert({
-      ...newCollectionData,
-      type: 'collection',
+      ...newWorkspaceData,
+      type: 'workspace',
     });
     console.log('New doc inserted:', newDoc);
     return newDoc;
@@ -25,18 +25,18 @@ ipcMain.handle('insert-collection', async (event, newCollectionData) => {
   }
 });
 
-ipcMain.handle('get-collection', async (event, collectionId) => {
+ipcMain.handle('get-workspace', async (event, workspaceId) => {
   return new Promise((resolve, reject) => {
-    db.findOne({ type: 'collection', _id: collectionId }, (err, doc) => {
+    db.findOne({ type: 'workspace', _id: workspaceId }, (err, doc) => {
       if (err) reject(err);
       resolve(doc);
     });
   });
 });
 
-ipcMain.handle('get-records', async (event, collectionId) => {
+ipcMain.handle('get-records', async (event, workspaceId) => {
   return new Promise((resolve, reject) => {
-    db.find({ type: 'record', collectionId: collectionId }, (err, docs) => {
+    db.find({ type: 'record', workspaceId: workspaceId }, (err, docs) => {
       if (err) reject(err);
       resolve(docs);
     });
@@ -81,10 +81,10 @@ ipcMain.handle('delete-record', async (event, deleteData) => {
   });
 });
 
-ipcMain.handle('update-collection', async (event, updateData) => {
+ipcMain.handle('update-workspace', async (event, updateData) => {
   return new Promise((resolve, reject) => {
     db.update(
-      { _id: updateData._id, type: 'collection' },
+      { _id: updateData._id, type: 'workspace' },
       { $set: { name: updateData.name } },
       {},
       (err, numReplaced) => {
@@ -95,10 +95,10 @@ ipcMain.handle('update-collection', async (event, updateData) => {
   });
 });
 
-ipcMain.handle('delete-collection', async (event, deleteData) => {
+ipcMain.handle('delete-workspace', async (event, deleteData) => {
   return new Promise((resolve, reject) => {
     db.remove(
-      { _id: deleteData._id, type: 'collection' },
+      { _id: deleteData._id, type: 'workspace' },
       {},
       (err, numRemoved) => {
         if (err) reject(err);

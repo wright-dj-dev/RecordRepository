@@ -1,11 +1,10 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import CollectionList from './components/collection/CollectionList';
-import CollectionPage from './components/collection/CollectionPage';
+import WorkspaceList from './components/workspace/WorkspaceList';
+import WorkspacePage from './components/workspace/WorkspacePage';
 import Sidebar from './components/Sidebar';
-import MainArea from './components/MainArea';
-import EditCollectionPage from './components/collection/EditCollectionPage';
-import { CollectionProvider } from './contexts/CollectionProvider';
+import EditWorkspacePage from './components/workspace/EditWorkspacePage';
+import { WorkspaceProvider } from './contexts/WorkspaceProvider';
 
 function Dashboard() {
   return (
@@ -17,21 +16,20 @@ function Dashboard() {
 export default function App() {
 
   return (
-    <CollectionProvider>
+    <WorkspaceProvider>
       <Router>
         <div className="app">
           <Sidebar />
           <div className="content">
             <Routes>
-              <Route path="/collections" element={<CollectionList />} />
-              <Route path="/collections/:collectionId" element={<CollectionPage />} />
-              <Route path="/collections/:collectionId/edit" element={<EditCollectionPage />} />
+              <Route path="/workspaces" element={<WorkspaceList />} />
+              <Route path="/workspaces/:workspaceId" element={<WorkspacePage />} />
+              <Route path="/workspaces/:workspaceId/edit" element={<EditWorkspacePage />} />
               <Route path="/" element={<Dashboard />} />
-              <Route path="/records" element={<MainArea />} />
             </Routes>
           </div>
         </div>
       </Router>
-    </CollectionProvider>
+    </WorkspaceProvider>
   );
 }
